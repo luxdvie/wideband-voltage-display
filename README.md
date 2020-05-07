@@ -21,6 +21,8 @@ The serial output of the Wideband is too slow. Do the following:
    -  Connect/Disconnect COM Port
    -  Full Screen (voltage display) mode
 
+![screenshot](./images/screenshot.png)
+
 # Requirements
 
 -  Windows Application
@@ -28,6 +30,13 @@ The serial output of the Wideband is too slow. Do the following:
    -  To build/modify: Windows Operating System, Visual Studio 2017
 -  Arduino Sketch
    -  Arduino Uno or compatible
+
+# Steps To Build
+
+-  Open .sln file in Visual Studio
+-  "Build the solution"
+-  The EXE (WidebandVoltageDisplay.exe) will be in /bin/Debug or /bin/Release (depending on your configuration) with all its other dependencies
+   -  The other dependencies are needed for the EXE to run
 
 # Author
 
