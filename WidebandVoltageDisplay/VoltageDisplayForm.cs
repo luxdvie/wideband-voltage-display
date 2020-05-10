@@ -105,10 +105,26 @@ namespace WidebandVoltageDisplay
             }
         }
 
-        /// <summary>
+        /// <summary>            this.AlwaysOnTopCheckbox.CheckedChanged += new System.EventHandler(this.AlwaysOnTopCheckbox_CheckedChanged);
         /// Information about the current version of this app
         /// </summary>
         public VersionInfo CurrentVersion { get; set; } = new VersionInfo();
+
+        /// <summary>
+        /// Override TopMost to control icon on the 'Always on Top' menu icon
+        /// </summary>
+        public new bool TopMost
+        {
+            get
+            {
+                return base.TopMost;
+            }
+            set
+            {
+                base.TopMost = value;
+                this.alwaysOnTopMenu.Image = value ? new Bitmap(Properties.Resources._checked) : null;
+            }
+        }
 
         public VoltageDisplayForm()
         {
@@ -117,6 +133,7 @@ namespace WidebandVoltageDisplay
             this.SerialPortComboBox.Items.AddRange(SerialPort.GetPortNames());
             this.dataWriterDelegate = new WriteDataDelegate(DataWriter);
             this.GetVerionInfo();
+            this.TopMost = true;
         }
 
         /// <summary>
@@ -241,17 +258,6 @@ namespace WidebandVoltageDisplay
         }
 
         /// <summary>
-        /// Handles the change of the 'always on top' checkbox
-        /// If checked, the form will be TopMost
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void AlwaysOnTopCheckbox_CheckedChanged(object sender, EventArgs e)
-        {
-            this.TopMost = this.AlwaysOnTopCheckbox.Checked;
-        }
-
-        /// <summary>
         /// Attempts to read version information from the version.json file and put it into the app
         /// </summary>
         public void GetVerionInfo()
@@ -303,6 +309,16 @@ namespace WidebandVoltageDisplay
         {
             this.Disconnect();
             this.Close();
+        }
+
+        /// <summary>
+        /// Handles the click of 'Always on Top' to enable or disable that feature
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickAlwaysOnTop(object sender, EventArgs e)
+        {
+            this.TopMost = !this.TopMost;
         }
     }
 }
