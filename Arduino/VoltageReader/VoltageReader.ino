@@ -12,7 +12,7 @@ void setup() {
 
 void loop() {
   sendData();
-  delay(5);
+  delay(150); // data refresh speed
 }
 
 // Reads the voltage on A0 and returns a float between 0.00 and 5.00
