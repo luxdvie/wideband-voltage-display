@@ -145,6 +145,11 @@ namespace WidebandVoltageDisplay
             this.DataMonitorTextBox.AppendText(newData); // log to the log file
 
             var strings = this.DataMonitorTextBox.Text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            if (strings.Length == 0)
+            {
+                return;
+            }
+
             var lastString = strings[strings.Length - 1].Trim();
             bool isValid = !String.IsNullOrEmpty(lastString) && lastString.StartsWith("{") && lastString.EndsWith("{");
 
