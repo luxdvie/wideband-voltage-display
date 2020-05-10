@@ -93,7 +93,7 @@ namespace WidebandVoltageDisplay
             set
             {
                 this._isConnected = value;
-                this.ConnectDisconnectButton.Text = value ? "Disconnect" : "Connect";
+                this.connectMenu.Text = value ? "Disconnect" : "Connect";
                 this.VoltageLabel.Text = "---"; // reset on change
                 this.LastVoltageLabel.Visible = value;
 
@@ -222,7 +222,7 @@ namespace WidebandVoltageDisplay
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ConnectDisconnectButton_Click(object sender, EventArgs e)
+        private void TogglePortConnection()
         {
             if (this.isConnected)
             {
@@ -364,6 +364,11 @@ namespace WidebandVoltageDisplay
         private void OnClickAlwaysOnTop(object sender, EventArgs e)
         {
             this.TopMost = !this.TopMost;
+        }
+
+        private void OnClickConnectDisconnectMenu(object sender, EventArgs e)
+        {
+            this.TogglePortConnection();
         }
     }
 }
