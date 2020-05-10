@@ -33,8 +33,6 @@
             this.LastVoltageLabel = new System.Windows.Forms.Label();
             this.ConnectDisconnectButton = new System.Windows.Forms.Button();
             this.DataMonitorTextBox = new System.Windows.Forms.TextBox();
-            this.SerialPortComboBoxLabel = new System.Windows.Forms.Label();
-            this.SerialPortComboBox = new System.Windows.Forms.ComboBox();
             this.ContentPanel = new System.Windows.Forms.Panel();
             this.VoltageLabel = new System.Windows.Forms.Label();
             this.MenuStrip = new System.Windows.Forms.MenuStrip();
@@ -44,6 +42,9 @@
             this.AboutMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.versionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubRepoMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.connectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.comPortMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.connectMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.HeaderPanel.SuspendLayout();
             this.ContentPanel.SuspendLayout();
             this.MenuStrip.SuspendLayout();
@@ -53,8 +54,6 @@
             // 
             this.HeaderPanel.BackColor = System.Drawing.SystemColors.ControlLight;
             this.HeaderPanel.Controls.Add(this.ConnectDisconnectButton);
-            this.HeaderPanel.Controls.Add(this.SerialPortComboBoxLabel);
-            this.HeaderPanel.Controls.Add(this.SerialPortComboBox);
             this.HeaderPanel.Dock = System.Windows.Forms.DockStyle.Top;
             this.HeaderPanel.Location = new System.Drawing.Point(0, 24);
             this.HeaderPanel.Name = "HeaderPanel";
@@ -92,24 +91,6 @@
             this.DataMonitorTextBox.TabIndex = 0;
             this.DataMonitorTextBox.Visible = false;
             // 
-            // SerialPortComboBoxLabel
-            // 
-            this.SerialPortComboBoxLabel.AutoSize = true;
-            this.SerialPortComboBoxLabel.Location = new System.Drawing.Point(12, 15);
-            this.SerialPortComboBoxLabel.Name = "SerialPortComboBoxLabel";
-            this.SerialPortComboBoxLabel.Size = new System.Drawing.Size(53, 13);
-            this.SerialPortComboBoxLabel.TabIndex = 1;
-            this.SerialPortComboBoxLabel.Text = "COM Port";
-            // 
-            // SerialPortComboBox
-            // 
-            this.SerialPortComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.SerialPortComboBox.FormattingEnabled = true;
-            this.SerialPortComboBox.Location = new System.Drawing.Point(71, 12);
-            this.SerialPortComboBox.Name = "SerialPortComboBox";
-            this.SerialPortComboBox.Size = new System.Drawing.Size(121, 21);
-            this.SerialPortComboBox.TabIndex = 0;
-            // 
             // ContentPanel
             // 
             this.ContentPanel.BackColor = System.Drawing.SystemColors.MenuHighlight;
@@ -138,6 +119,7 @@
             // 
             this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.connectionToolStripMenuItem,
             this.AboutMenu});
             this.MenuStrip.Location = new System.Drawing.Point(0, 0);
             this.MenuStrip.Name = "MenuStrip";
@@ -157,14 +139,14 @@
             // alwaysOnTopMenu
             // 
             this.alwaysOnTopMenu.Name = "alwaysOnTopMenu";
-            this.alwaysOnTopMenu.Size = new System.Drawing.Size(152, 22);
+            this.alwaysOnTopMenu.Size = new System.Drawing.Size(180, 22);
             this.alwaysOnTopMenu.Text = "Always On Top";
             this.alwaysOnTopMenu.Click += new System.EventHandler(this.OnClickAlwaysOnTop);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnClickExitMenu);
             // 
@@ -180,16 +162,37 @@
             // versionMenuItem
             // 
             this.versionMenuItem.Name = "versionMenuItem";
-            this.versionMenuItem.Size = new System.Drawing.Size(142, 22);
+            this.versionMenuItem.Size = new System.Drawing.Size(180, 22);
             this.versionMenuItem.Text = "Version ";
             this.versionMenuItem.Click += new System.EventHandler(this.OnClickVersionMenu);
             // 
             // githubRepoMenu
             // 
             this.githubRepoMenu.Name = "githubRepoMenu";
-            this.githubRepoMenu.Size = new System.Drawing.Size(142, 22);
+            this.githubRepoMenu.Size = new System.Drawing.Size(180, 22);
             this.githubRepoMenu.Text = "GitHub Repo";
             this.githubRepoMenu.Click += new System.EventHandler(this.OnClickGithubRepoMenu);
+            // 
+            // connectionToolStripMenuItem
+            // 
+            this.connectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.comPortMenu,
+            this.connectMenu});
+            this.connectionToolStripMenuItem.Name = "connectionToolStripMenuItem";
+            this.connectionToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
+            this.connectionToolStripMenuItem.Text = "Connection";
+            // 
+            // comPortMenu
+            // 
+            this.comPortMenu.Name = "comPortMenu";
+            this.comPortMenu.Size = new System.Drawing.Size(180, 22);
+            this.comPortMenu.Text = "COM Port";
+            // 
+            // connectMenu
+            // 
+            this.connectMenu.Name = "connectMenu";
+            this.connectMenu.Size = new System.Drawing.Size(180, 22);
+            this.connectMenu.Text = "Connect";
             // 
             // VoltageDisplayForm
             // 
@@ -204,7 +207,6 @@
             this.Name = "VoltageDisplayForm";
             this.Text = "Wideband Voltage Displayer";
             this.HeaderPanel.ResumeLayout(false);
-            this.HeaderPanel.PerformLayout();
             this.ContentPanel.ResumeLayout(false);
             this.ContentPanel.PerformLayout();
             this.MenuStrip.ResumeLayout(false);
@@ -218,8 +220,6 @@
 
         private System.Windows.Forms.Panel HeaderPanel;
         private System.Windows.Forms.Panel ContentPanel;
-        private System.Windows.Forms.ComboBox SerialPortComboBox;
-        private System.Windows.Forms.Label SerialPortComboBoxLabel;
         private System.Windows.Forms.TextBox DataMonitorTextBox;
         private System.Windows.Forms.Button ConnectDisconnectButton;
         private System.Windows.Forms.Label VoltageLabel;
@@ -231,6 +231,9 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem alwaysOnTopMenu;
+        private System.Windows.Forms.ToolStripMenuItem connectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem comPortMenu;
+        private System.Windows.Forms.ToolStripMenuItem connectMenu;
     }
 }
 

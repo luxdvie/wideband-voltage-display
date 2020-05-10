@@ -104,7 +104,13 @@ namespace WidebandVoltageDisplay
             }
         }
 
-        /// <summary>            this.AlwaysOnTopCheckbox.CheckedChanged += new System.EventHandler(this.AlwaysOnTopCheckbox_CheckedChanged);
+        /// <summary>
+        /// The name of the COM Port we have selected
+        /// </summary>
+        private string SelectedComPort = "";
+
+        /// <summary>            
+        /// this.AlwaysOnTopCheckbox.CheckedChanged += new System.EventHandler(this.AlwaysOnTopCheckbox_CheckedChanged);
         /// Information about the current version of this app
         /// </summary>
         public VersionInfo CurrentVersion { get; set; } = new VersionInfo();
@@ -129,10 +135,45 @@ namespace WidebandVoltageDisplay
         {
             InitializeComponent();
             this.isConnected = false;
-            this.SerialPortComboBox.Items.AddRange(SerialPort.GetPortNames());
+            this.SetupComPortMenu();
             this.dataWriterDelegate = new WriteDataDelegate(DataWriter);
             this.GetVerionInfo();
             this.TopMost = true;
+        }
+
+        private void SetupComPortMenu()
+        {
+            var serialPorts = SerialPort.GetPortNames();
+            foreach (var port in serialPorts)
+            {
+                this.comPortMenu.DropDownItems.Add(port);
+            }
+
+            this.comPortMenu.DropDownItemClicked += OnClickComPortMenuItem;
+        }
+
+        /// <summary>
+        /// Handles the selection of a COM Port
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickComPortMenuItem(object sender, ToolStripItemClickedEventArgs e)
+        {
+            SelectedComPort = e.ClickedItem.Text.Trim();
+            this.comPortMenu.Image = new Bitmap(Properties.Resources._checked);
+            this.comPortMenu.Text = $"COM Port ({SelectedComPort})";
+
+            foreach (ToolStripMenuItem m in this.comPortMenu.DropDownItems)
+            {
+                if (m.Text?.Trim() == SelectedComPort)
+                {
+                    m.Image = new Bitmap(Properties.Resources._checked);
+                }
+                else
+                {
+                    m.Image = null;
+                }
+            }
         }
 
         /// <summary>
@@ -189,7 +230,7 @@ namespace WidebandVoltageDisplay
                 return;
             }
 
-            if (String.IsNullOrEmpty(this.SerialPortComboBox.Text))
+            if (String.IsNullOrEmpty(SelectedComPort))
             {
                 MessageBox.Show(this, "You must select a serial port.", "Please Select Serial Port", MessageBoxButtons.OK);
                 return;
@@ -199,7 +240,7 @@ namespace WidebandVoltageDisplay
             {
                 this.serialPort = new SerialPort()
                 {
-                    PortName = this.SerialPortComboBox.Text,
+                    PortName = SelectedComPort,
                     BaudRate = 9600
                 };
 
