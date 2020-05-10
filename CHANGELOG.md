@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [release/0.2.0] - 2020-05-10
+### Changes
+- Move all configuration / connection control into a menu strip
+
 ## [release/0.1.0] - 2020-05-10
 ### Initial Release
 - Receive JSON voltage from Arduino
@@ -10,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Allow 'Always on top'
 
 [release/0.1.0]: https://github.com/luxdvie/wideband-voltage-display/releases/tag/release%2F0.1.0
+[release/0.2.0]: https://github.com/luxdvie/wideband-voltage-display/releases/tag/release%2F0.2.0
 
 # Reference
 
