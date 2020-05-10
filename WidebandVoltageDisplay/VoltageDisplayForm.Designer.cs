@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VoltageDisplayForm));
             this.HeaderPanel = new System.Windows.Forms.Panel();
+            this.AlwaysOnTopCheckbox = new System.Windows.Forms.CheckBox();
             this.LastVoltageLabel = new System.Windows.Forms.Label();
             this.ConnectDisconnectButton = new System.Windows.Forms.Button();
             this.DataMonitorTextBox = new System.Windows.Forms.TextBox();
@@ -37,7 +38,13 @@
             this.SerialPortComboBox = new System.Windows.Forms.ComboBox();
             this.ContentPanel = new System.Windows.Forms.Panel();
             this.VoltageLabel = new System.Windows.Forms.Label();
-            this.AlwaysOnTopCheckbox = new System.Windows.Forms.CheckBox();
+            this.MenuStrip = new System.Windows.Forms.MenuStrip();
+            this.AboutMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.versionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.githubRepoMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.MenuStrip.SuspendLayout();
             this.HeaderPanel.SuspendLayout();
             this.ContentPanel.SuspendLayout();
             this.SuspendLayout();
@@ -56,6 +63,17 @@
             this.HeaderPanel.Name = "HeaderPanel";
             this.HeaderPanel.Size = new System.Drawing.Size(800, 46);
             this.HeaderPanel.TabIndex = 0;
+            // 
+            // AlwaysOnTopCheckbox
+            // 
+            this.AlwaysOnTopCheckbox.AutoSize = true;
+            this.AlwaysOnTopCheckbox.Location = new System.Drawing.Point(281, 13);
+            this.AlwaysOnTopCheckbox.Name = "AlwaysOnTopCheckbox";
+            this.AlwaysOnTopCheckbox.Size = new System.Drawing.Size(96, 17);
+            this.AlwaysOnTopCheckbox.TabIndex = 4;
+            this.AlwaysOnTopCheckbox.Text = "Always on Top";
+            this.AlwaysOnTopCheckbox.UseVisualStyleBackColor = true;
+            this.AlwaysOnTopCheckbox.CheckedChanged += new System.EventHandler(this.AlwaysOnTopCheckbox_CheckedChanged);
             // 
             // LastVoltageLabel
             // 
@@ -126,16 +144,55 @@
             this.VoltageLabel.Text = "9.00";
             this.VoltageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // AlwaysOnTopCheckbox
+            // MenuStrip
             // 
-            this.AlwaysOnTopCheckbox.AutoSize = true;
-            this.AlwaysOnTopCheckbox.Location = new System.Drawing.Point(281, 13);
-            this.AlwaysOnTopCheckbox.Name = "AlwaysOnTopCheckbox";
-            this.AlwaysOnTopCheckbox.Size = new System.Drawing.Size(96, 17);
-            this.AlwaysOnTopCheckbox.TabIndex = 4;
-            this.AlwaysOnTopCheckbox.Text = "Always on Top";
-            this.AlwaysOnTopCheckbox.UseVisualStyleBackColor = true;
-            this.AlwaysOnTopCheckbox.CheckedChanged += new System.EventHandler(this.AlwaysOnTopCheckbox_CheckedChanged);
+            this.MenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.AboutMenu});
+            this.MenuStrip.Location = new System.Drawing.Point(0, 46);
+            this.MenuStrip.Name = "MenuStrip";
+            this.MenuStrip.Size = new System.Drawing.Size(800, 24);
+            this.MenuStrip.TabIndex = 5;
+            this.MenuStrip.Text = "menuStrip1";
+            this.MenuStrip.Dock = System.Windows.Forms.DockStyle.Top;
+            // 
+            // AboutMenu
+            // 
+            this.AboutMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.versionMenuItem,
+            this.githubRepoMenu});
+            this.AboutMenu.Name = "AboutMenu";
+            this.AboutMenu.Size = new System.Drawing.Size(52, 20);
+            this.AboutMenu.Text = "About";
+            // 
+            // versionMenuItem
+            // 
+            this.versionMenuItem.Name = "versionMenuItem";
+            this.versionMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.versionMenuItem.Text = "Version ";
+            this.versionMenuItem.Click += new System.EventHandler(this.OnClickVersionMenu);
+            // 
+            // githubRepoMenu
+            // 
+            this.githubRepoMenu.Name = "githubRepoMenu";
+            this.githubRepoMenu.Size = new System.Drawing.Size(180, 22);
+            this.githubRepoMenu.Text = "GitHub Repo";
+            this.githubRepoMenu.Click += new System.EventHandler(this.OnClickGithubRepoMenu);
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnClickExitMenu);
             // 
             // VoltageDisplayForm
             // 
@@ -144,13 +201,18 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.ContentPanel);
             this.Controls.Add(this.HeaderPanel);
+            this.Controls.Add(this.MenuStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MainMenuStrip = this.MenuStrip;
             this.Name = "VoltageDisplayForm";
             this.Text = "Wideband Voltage Displayer";
+            this.MenuStrip.ResumeLayout(false);
+            this.MenuStrip.PerformLayout();
             this.HeaderPanel.ResumeLayout(false);
             this.HeaderPanel.PerformLayout();
             this.ContentPanel.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -165,6 +227,12 @@
         private System.Windows.Forms.Label VoltageLabel;
         private System.Windows.Forms.Label LastVoltageLabel;
         private System.Windows.Forms.CheckBox AlwaysOnTopCheckbox;
+        private System.Windows.Forms.MenuStrip MenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem AboutMenu;
+        private System.Windows.Forms.ToolStripMenuItem versionMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem githubRepoMenu;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     }
 }
 

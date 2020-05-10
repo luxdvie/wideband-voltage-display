@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\VersionInfo.cs" />
     <Compile Include="VoltageDisplayForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -82,6 +83,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="version.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

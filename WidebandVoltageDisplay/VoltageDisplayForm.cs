@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,16 @@ namespace WidebandVoltageDisplay
     /// </summary>
     public partial class VoltageDisplayForm : Form
     {
+        /// <summary>
+        /// Link to the GitHub repository
+        /// </summary>
+        public static readonly string GithubRepoLink = "https://github.com/luxdvie/wideband-voltage-display";
+
+        /// <summary>
+        /// Link to the changelog
+        /// </summary>
+        public static readonly string ChangelogLink = $"{GithubRepoLink}/blob/master/CHANGELOG.md";
+
         /// <summary>
         /// Signature for background thread updater
         /// </summary>
@@ -94,12 +105,18 @@ namespace WidebandVoltageDisplay
             }
         }
 
+        /// <summary>
+        /// Information about the current version of this app
+        /// </summary>
+        public VersionInfo CurrentVersion { get; set; } = new VersionInfo();
+
         public VoltageDisplayForm()
         {
             InitializeComponent();
             this.isConnected = false;
             this.SerialPortComboBox.Items.AddRange(SerialPort.GetPortNames());
             this.dataWriterDelegate = new WriteDataDelegate(DataWriter);
+            this.GetVerionInfo();
         }
 
         /// <summary>
@@ -232,6 +249,60 @@ namespace WidebandVoltageDisplay
         private void AlwaysOnTopCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             this.TopMost = this.AlwaysOnTopCheckbox.Checked;
+        }
+
+        /// <summary>
+        /// Attempts to read version information from the version.json file and put it into the app
+        /// </summary>
+        public void GetVerionInfo()
+        {
+            try
+            {
+                var vString = File.ReadAllText("version.json");
+                if (String.IsNullOrEmpty(vString))
+                {
+                    return;
+                }
+
+                var versionInfo = JsonConvert.DeserializeObject<VersionInfo>(vString);
+                this.CurrentVersion = versionInfo ?? new VersionInfo();
+                this.versionMenuItem.Text = $"Version: {this.CurrentVersion?.Version ?? "Unknown"}";
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(this, $"There was an error reading the version information. Please make sure version.json exists in the application directory.\r\n Error: {e.Message}", "Version Error", MessageBoxButtons.OK);
+            }
+        }
+
+        /// <summary>
+        /// Handles the click of the 'GitHub Repo' menu, to open the github repository
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickGithubRepoMenu(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(GithubRepoLink);
+        }
+
+        /// <summary>
+        /// Handles the click of the 'Version' menu, to open the changelog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickVersionMenu(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(ChangelogLink);
+        }
+
+        /// <summary>
+        /// Handles the click of the 'Exit' menu, to exit the application
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickExitMenu(object sender, EventArgs e)
+        {
+            this.Disconnect();
+            this.Close();
         }
     }
 }
