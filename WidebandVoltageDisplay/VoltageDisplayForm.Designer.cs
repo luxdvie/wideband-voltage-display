@@ -52,9 +52,7 @@
             // HeaderPanel
             // 
             this.HeaderPanel.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.HeaderPanel.Controls.Add(this.LastVoltageLabel);
             this.HeaderPanel.Controls.Add(this.ConnectDisconnectButton);
-            this.HeaderPanel.Controls.Add(this.DataMonitorTextBox);
             this.HeaderPanel.Controls.Add(this.SerialPortComboBoxLabel);
             this.HeaderPanel.Controls.Add(this.SerialPortComboBox);
             this.HeaderPanel.Dock = System.Windows.Forms.DockStyle.Top;
@@ -65,12 +63,14 @@
             // 
             // LastVoltageLabel
             // 
-            this.LastVoltageLabel.AutoSize = true;
-            this.LastVoltageLabel.Location = new System.Drawing.Point(484, 14);
+            this.LastVoltageLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.LastVoltageLabel.Location = new System.Drawing.Point(708, 3);
+            this.LastVoltageLabel.Margin = new System.Windows.Forms.Padding(0);
             this.LastVoltageLabel.Name = "LastVoltageLabel";
             this.LastVoltageLabel.Size = new System.Drawing.Size(89, 13);
             this.LastVoltageLabel.TabIndex = 3;
             this.LastVoltageLabel.Text = "LastVoltageLabel";
+            this.LastVoltageLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.LastVoltageLabel.Visible = false;
             // 
             // ConnectDisconnectButton
@@ -85,10 +85,10 @@
             // 
             // DataMonitorTextBox
             // 
-            this.DataMonitorTextBox.Location = new System.Drawing.Point(585, 3);
+            this.DataMonitorTextBox.Location = new System.Drawing.Point(585, 19);
             this.DataMonitorTextBox.Multiline = true;
             this.DataMonitorTextBox.Name = "DataMonitorTextBox";
-            this.DataMonitorTextBox.Size = new System.Drawing.Size(203, 37);
+            this.DataMonitorTextBox.Size = new System.Drawing.Size(203, 149);
             this.DataMonitorTextBox.TabIndex = 0;
             this.DataMonitorTextBox.Visible = false;
             // 
@@ -113,6 +113,8 @@
             // ContentPanel
             // 
             this.ContentPanel.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.ContentPanel.Controls.Add(this.LastVoltageLabel);
+            this.ContentPanel.Controls.Add(this.DataMonitorTextBox);
             this.ContentPanel.Controls.Add(this.VoltageLabel);
             this.ContentPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ContentPanel.Location = new System.Drawing.Point(0, 70);
@@ -204,6 +206,7 @@
             this.HeaderPanel.ResumeLayout(false);
             this.HeaderPanel.PerformLayout();
             this.ContentPanel.ResumeLayout(false);
+            this.ContentPanel.PerformLayout();
             this.MenuStrip.ResumeLayout(false);
             this.MenuStrip.PerformLayout();
             this.ResumeLayout(false);

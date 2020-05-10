@@ -95,7 +95,6 @@ namespace WidebandVoltageDisplay
                 this._isConnected = value;
                 this.ConnectDisconnectButton.Text = value ? "Disconnect" : "Connect";
                 this.VoltageLabel.Text = "---"; // reset on change
-                this.DataMonitorTextBox.Visible = value;
                 this.LastVoltageLabel.Visible = value;
 
                 if (!value)
@@ -166,7 +165,7 @@ namespace WidebandVoltageDisplay
                     var data = JsonConvert.DeserializeObject<DataModel>(lastString);
                     if (data != null)
                     {
-                        this.LastVoltageLabel.Text = "Last Voltage: " + data.Voltage.ToString("F2");
+                        this.LastVoltageLabel.Text = "Voltage: " + data.Voltage.ToString("F2");
                         this.VoltageLabel.Text = this.MappedValue(data.Voltage).ToString("F2");
                     }
                 }
