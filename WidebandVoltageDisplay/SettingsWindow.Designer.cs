@@ -50,14 +50,14 @@
             this.minValueTextbox.Location = new System.Drawing.Point(101, 55);
             this.minValueTextbox.Name = "minValueTextbox";
             this.minValueTextbox.Size = new System.Drawing.Size(100, 20);
-            this.minValueTextbox.TabIndex = 1;
+            this.minValueTextbox.TabIndex = 4;
             // 
             // maxValueTextbox
             // 
             this.maxValueTextbox.Location = new System.Drawing.Point(101, 86);
             this.maxValueTextbox.Name = "maxValueTextbox";
             this.maxValueTextbox.Size = new System.Drawing.Size(100, 20);
-            this.maxValueTextbox.TabIndex = 2;
+            this.maxValueTextbox.TabIndex = 5;
             // 
             // label1
             // 
@@ -91,7 +91,7 @@
             this.profileNameTextbox.Location = new System.Drawing.Point(101, 24);
             this.profileNameTextbox.Name = "profileNameTextbox";
             this.profileNameTextbox.Size = new System.Drawing.Size(168, 20);
-            this.profileNameTextbox.TabIndex = 5;
+            this.profileNameTextbox.TabIndex = 3;
             // 
             // SaveProfileButton
             // 
@@ -108,7 +108,7 @@
             this.DeleteProfileButton.Location = new System.Drawing.Point(299, 177);
             this.DeleteProfileButton.Name = "DeleteProfileButton";
             this.DeleteProfileButton.Size = new System.Drawing.Size(75, 23);
-            this.DeleteProfileButton.TabIndex = 8;
+            this.DeleteProfileButton.TabIndex = 6;
             this.DeleteProfileButton.Text = "Delete Profile";
             this.DeleteProfileButton.UseVisualStyleBackColor = true;
             this.DeleteProfileButton.Click += new System.EventHandler(this.DeleteProfileButton_Click);
@@ -135,7 +135,7 @@
             this.profileCombobox.Location = new System.Drawing.Point(109, 15);
             this.profileCombobox.Name = "profileCombobox";
             this.profileCombobox.Size = new System.Drawing.Size(184, 21);
-            this.profileCombobox.TabIndex = 10;
+            this.profileCombobox.TabIndex = 1;
             // 
             // label4
             // 
@@ -161,7 +161,7 @@
             this.addProfileButton.Location = new System.Drawing.Point(299, 12);
             this.addProfileButton.Name = "addProfileButton";
             this.addProfileButton.Size = new System.Drawing.Size(75, 23);
-            this.addProfileButton.TabIndex = 12;
+            this.addProfileButton.TabIndex = 2;
             this.addProfileButton.Text = "Add Profile";
             this.addProfileButton.UseVisualStyleBackColor = true;
             this.addProfileButton.Click += new System.EventHandler(this.OnClickAddButton);
