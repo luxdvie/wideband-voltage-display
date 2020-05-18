@@ -43,6 +43,8 @@
             this.AboutMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.versionMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubRepoMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.profileMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.editProfilesMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.ContentPanel.SuspendLayout();
             this.MenuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -116,22 +118,24 @@
             // alwaysOnTopMenu
             // 
             this.alwaysOnTopMenu.Name = "alwaysOnTopMenu";
-            this.alwaysOnTopMenu.Size = new System.Drawing.Size(152, 22);
+            this.alwaysOnTopMenu.Size = new System.Drawing.Size(180, 22);
             this.alwaysOnTopMenu.Text = "Always On Top";
             this.alwaysOnTopMenu.Click += new System.EventHandler(this.OnClickAlwaysOnTop);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnClickExitMenu);
             // 
             // connectionToolStripMenuItem
             // 
             this.connectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.profileMenu,
             this.comPortMenu,
-            this.connectMenu});
+            this.connectMenu,
+            this.editProfilesMenu});
             this.connectionToolStripMenuItem.Name = "connectionToolStripMenuItem";
             this.connectionToolStripMenuItem.Size = new System.Drawing.Size(81, 20);
             this.connectionToolStripMenuItem.Text = "Connection";
@@ -172,6 +176,19 @@
             this.githubRepoMenu.Text = "GitHub Repo";
             this.githubRepoMenu.Click += new System.EventHandler(this.OnClickGithubRepoMenu);
             // 
+            // profileMenu
+            // 
+            this.profileMenu.Name = "profileMenu";
+            this.profileMenu.Size = new System.Drawing.Size(180, 22);
+            this.profileMenu.Text = "Profile";
+            // 
+            // editProfilesMenu
+            // 
+            this.editProfilesMenu.Name = "editProfilesMenu";
+            this.editProfilesMenu.Size = new System.Drawing.Size(180, 22);
+            this.editProfilesMenu.Text = "Edit Profiles";
+            this.editProfilesMenu.Click += new System.EventHandler(this.OnClickEditProfilesMenu);
+            // 
             // VoltageDisplayForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -207,6 +224,8 @@
         private System.Windows.Forms.ToolStripMenuItem connectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem comPortMenu;
         private System.Windows.Forms.ToolStripMenuItem connectMenu;
+        private System.Windows.Forms.ToolStripMenuItem profileMenu;
+        private System.Windows.Forms.ToolStripMenuItem editProfilesMenu;
     }
 }
 

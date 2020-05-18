@@ -51,7 +51,15 @@
   <ItemGroup>
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\ProfileModel.cs" />
+    <Compile Include="Models\SavedDataModel.cs" />
     <Compile Include="Models\VersionInfo.cs" />
+    <Compile Include="SettingsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SettingsWindow.Designer.cs">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="VoltageDisplayForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -70,6 +78,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SettingsWindow.resx">
+      <DependentUpon>SettingsWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VoltageDisplayForm.resx">
       <DependentUpon>VoltageDisplayForm.cs</DependentUpon>
     </EmbeddedResource>

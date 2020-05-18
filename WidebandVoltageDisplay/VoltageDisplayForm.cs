@@ -65,26 +65,21 @@ namespace WidebandVoltageDisplay
         private readonly float maxVoltage = 5.00f;
 
         /// <summary>
-        /// Minimum mapped range for the value that represents the voltage
+        /// The profile we have currently selected for display
         /// </summary>
-        private readonly float mapRangeStart = 9.00f;
-
-        /// <summary>
-        /// Maximum mapped range for the value that represents the voltage
-        /// </summary>
-        private readonly float mapRangeStop = 19.00f;
+        public static SavedDataModel SavedData { get; set; }
 
         /// <summary>
         /// Gets the value that is mapped for the given voltage
         /// </summary>
         /// <param name="voltage"></param>
         /// <returns></returns>
-        private float MappedValue(float voltage) => voltage.Map(minVoltage, maxVoltage, mapRangeStart, mapRangeStop);
+        private float MappedValue(float voltage) => voltage.Map(minVoltage, maxVoltage, SavedData?.CurrentProfile?.MinValue ?? 0.00f, SavedData?.CurrentProfile?.MaxValue ?? 0.00f);
 
         /// <summary>
         /// Whether the serial port is open
         /// </summary>
-        private bool isConnected
+        private bool IsConnected
         {
             get
             {
@@ -105,9 +100,26 @@ namespace WidebandVoltageDisplay
         }
 
         /// <summary>
+        /// Private field for this.SelectedComPort
+        /// </summary>
+
+        private string _selectedComPort = String.Empty;
+
+        /// <summary>
         /// The name of the COM Port we have selected
         /// </summary>
-        private string SelectedComPort = "";
+        private string SelectedComPort
+        {
+            get
+            {
+                return this._selectedComPort;
+            }
+            set
+            {
+                this._selectedComPort = value ?? String.Empty;
+                SavedData.LastCOMPort = this._selectedComPort;
+            }
+        }
 
         /// <summary>            
         /// this.AlwaysOnTopCheckbox.CheckedChanged += new System.EventHandler(this.AlwaysOnTopCheckbox_CheckedChanged);
@@ -127,20 +139,174 @@ namespace WidebandVoltageDisplay
             set
             {
                 base.TopMost = value;
-                this.alwaysOnTopMenu.Image = value ? new Bitmap(Properties.Resources._checked) : null;
+                this.alwaysOnTopMenu.Image = base.TopMost ? new Bitmap(Properties.Resources._checked) : null;
+                SavedData.TopMost = base.TopMost;
             }
         }
 
         public VoltageDisplayForm()
         {
             InitializeComponent();
-            this.isConnected = false;
+
+            SavedData = SavedDataModel.Read();
+            SavedData.DataChanged += this.SavedData_DataChanged;
+            this.FormClosed += this.OnFormClosed;
+            this.SetScreenSizeAndPosition();
+
+            this.IsConnected = false;
             this.SetupComPortMenu();
             this.dataWriterDelegate = new WriteDataDelegate(DataWriter);
             this.GetVerionInfo();
-            this.TopMost = true;
+            this.SetupProfiles();
         }
 
+        /// <summary>
+        /// Sets the size, start position, etc. of this form
+        /// </summary>
+        private void SetScreenSizeAndPosition()
+        {
+            var screens = Screen.AllScreens;
+            Screen previousScreen = null;
+            foreach (var screen in screens)
+            {
+                if (screen.DeviceName == SavedData.ScreenName)
+                {
+                    previousScreen = screen;
+                    break;
+                }
+            }
+
+            bool onSecondaryMonitor = screens.Length > 1 && previousScreen != null;
+            previousScreen = previousScreen ?? screens[0]; // default to first monitor
+
+            if (onSecondaryMonitor)
+            {
+                this.StartPosition = FormStartPosition.Manual;
+                this.Location = SavedData.FormLocation;
+            }
+
+            if (SavedData.IsMaximized)
+            {
+                this.Size = new Size(800, 450); // force the default size if they 'un-maximize' the window
+                this.WindowState = FormWindowState.Maximized;
+            }
+            else
+            {
+                this.Size = SavedData.FormSize;
+                this.Location = SavedData.FormLocation;
+            }
+
+            // Make sure the form isn't too big, if the screen size changed
+            if (this.Size.Height > previousScreen.Bounds.Height)
+            {
+                this.Size = new Size(this.Size.Width, previousScreen.Bounds.Height);
+            }
+
+            if (this.Size.Width > previousScreen.Bounds.Width)
+            {
+                this.Size = new Size(previousScreen.Bounds.Width, this.Size.Height);
+            }
+
+            this.TopMost = SavedData.TopMost;
+        }
+
+        /// <summary>
+        /// Handles the close event to save the form's size/position
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnFormClosed(object sender, FormClosedEventArgs e)
+        {
+            SavedData.FormSize = this.Size;
+            SavedData.FormLocation = this.Location;
+            SavedData.IsMaximized = this.WindowState == FormWindowState.Maximized;
+
+            var screens = Screen.AllScreens;
+            if (screens.Length == 1)
+            {
+                SavedData.ScreenName = String.Empty;
+            }
+            else
+            {
+                var currentScreen = Screen.FromControl(this);
+                SavedData.ScreenName = currentScreen.DeviceName;
+            }
+        }
+
+        /// <summary>
+        /// Fires when the data is changed in our SavedData model
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SavedData_DataChanged(object sender, EventArgs e)
+        {
+            this.SetupProfiles();
+        }
+
+        /// <summary>
+        /// Sets up the list of profiles in the profile menu
+        /// </summary>
+        private void SetupProfiles()
+        {
+            this.profileMenu.DropDownItemClicked -= ProfileMenu_DropDownItemClicked;
+            this.profileMenu.DropDownItems.Clear();
+            foreach (var profile in SavedData.Profiles)
+            {
+                this.profileMenu.DropDownItems.Add(profile.ProfileName);
+            }
+
+            this.UpdateAfterProfileChange();
+            this.profileMenu.DropDownItemClicked += ProfileMenu_DropDownItemClicked;
+        }
+
+        /// <summary>
+        /// Handles the change of the selected profile
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ProfileMenu_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            string selectedProfileName = e.ClickedItem.Text.Trim();
+
+            ProfileModel selectedProfile = null;
+            foreach (var profile in SavedData.Profiles)
+            {
+                if (profile.ProfileName == selectedProfileName)
+                {
+                    selectedProfile = profile;
+                    break;
+                }
+            }
+
+            SavedData.CurrentProfile = selectedProfile;
+            this.UpdateAfterProfileChange();
+        }
+
+        /// <summary>
+        /// Sets the 'selected icon' in the current profile and updates form text
+        /// after changing the current profile
+        /// </summary>
+        private void UpdateAfterProfileChange()
+        {
+            this.Text = $"Wideband Voltage Displayer ({SavedData.CurrentProfile.ProfileName})";
+
+            // 'Check' the current profile
+            foreach (ToolStripMenuItem m in this.profileMenu.DropDownItems)
+            {
+                if (m.Text?.Trim() == SavedData.CurrentProfile?.ProfileName)
+                {
+                    m.Image = new Bitmap(Properties.Resources._checked);
+                }
+                else
+                {
+                    m.Image = null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates the COM Port options in the context menu
+        /// </summary>
         private void SetupComPortMenu()
         {
             var serialPorts = SerialPort.GetPortNames();
@@ -150,6 +316,26 @@ namespace WidebandVoltageDisplay
             }
 
             this.comPortMenu.DropDownItemClicked += OnClickComPortMenuItem;
+
+            // Choose the last COM Port if it's still available on this PC
+            if (!String.IsNullOrEmpty(SavedData?.LastCOMPort) && serialPorts.Contains(SavedData.LastCOMPort))
+            {
+                SelectedComPort = SavedData.LastCOMPort;
+                this.comPortMenu.Image = new Bitmap(Properties.Resources._checked);
+                this.comPortMenu.Text = $"COM Port ({SelectedComPort})";
+
+                foreach (ToolStripMenuItem m in this.comPortMenu.DropDownItems)
+                {
+                    if (m.Text?.Trim() == SelectedComPort)
+                    {
+                        m.Image = new Bitmap(Properties.Resources._checked);
+                    }
+                    else
+                    {
+                        m.Image = null;
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -224,7 +410,7 @@ namespace WidebandVoltageDisplay
         /// <param name="e"></param>
         private void TogglePortConnection()
         {
-            if (this.isConnected)
+            if (this.IsConnected)
             {
                 this.Disconnect();
                 return;
@@ -246,7 +432,7 @@ namespace WidebandVoltageDisplay
 
                 this.serialPort.DataReceived += this.SerialPort_DataReceived;
                 this.serialPort.Open();
-                this.isConnected = true;
+                this.IsConnected = true;
             }
             catch (Exception ex)
             {
@@ -272,14 +458,14 @@ namespace WidebandVoltageDisplay
                         this.serialPort.Close();
                         this.serialPort.Dispose();
                         this.serialPort = null;
-                        this.isConnected = false;
+                        this.IsConnected = false;
                     }
                 }
             }
             catch (Exception e)
             {
                 this.serialPort = null;
-                this.isConnected = false;
+                this.IsConnected = false;
                 MessageBox.Show(this, "Error disconnecting from the serial port: " + e.Message, "Error", MessageBoxButtons.OK);
             }
             finally
@@ -369,6 +555,30 @@ namespace WidebandVoltageDisplay
         private void OnClickConnectDisconnectMenu(object sender, EventArgs e)
         {
             this.TogglePortConnection();
+        }
+
+        /// <summary>
+        /// Handles when the user clicks the menu to manage profiles
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickEditProfilesMenu(object sender, EventArgs e)
+        {
+            var sw = new SettingsWindow
+            {
+                StartPosition = FormStartPosition.CenterParent,
+                TopMost = this.TopMost
+                
+            };
+
+            void OnFormClosed(object fSender, FormClosedEventArgs fe)
+            {
+                sw.FormClosed -= OnFormClosed;
+                this.SetupProfiles();
+            };
+
+            sw.ShowDialog();
+            sw.FormClosed += OnFormClosed;
         }
     }
 }
