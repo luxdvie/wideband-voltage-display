@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [release/0.3.0] - 2020-05-18
+### Changes
+- Add persistent data storage
+  - Remember last COM port, profile, and profiles that have been configured
+  - Remember last size + position
+- Add profile management
+  - Allows you to create custom min/max ranges that are mapped from input 0-5 volts
+
 ## [release/0.2.0] - 2020-05-10
 ### Changes
 - Move all configuration / connection control into a menu strip
